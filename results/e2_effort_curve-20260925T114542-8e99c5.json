@@ -1,0 +1,45 @@
+{
+ "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+ "seeds": 1,
+ "n_tasks": 8,
+ "arms": {
+  "low": {
+   "accuracy": null,
+   "output_tokens": {
+    "n": 0
+   },
+   "quota_tokens": {
+    "n": 0
+   },
+   "usd": {
+    "n": 0
+   },
+   "latency_ms": {
+    "n": 0
+   },
+   "truncated": 0,
+   "quota_vs_baseline": {
+    "n": 0
+   }
+  },
+  "high": {
+   "accuracy": null,
+   "output_tokens": {
+    "n": 0
+   },
+   "quota_tokens": {
+    "n": 0
+   },
+   "usd": {
+    "n": 0
+   },
+   "latency_ms": {
+    "n": 0
+   },
+   "truncated": 0,
+   "quota_vs_baseline": {
+    "n": 0
+   }
+  }
+ }
+}

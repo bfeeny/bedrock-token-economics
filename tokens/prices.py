@@ -52,6 +52,11 @@ MODELS: dict[str, Model] = {
         input_per_1k=0.006, output_per_1k=0.030,
         output_burndown=5.0, min_cache_tokens=1024,
         source="price+burndown+min-prefix: AWS pricing page & docs 2026-09-24"),
+    "us.anthropic.claude-sonnet-4-5-20250929-v1:0": Model(
+        "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+        output_burndown=5.0, min_cache_tokens=1024,
+        source="burndown+min-prefix: AWS docs 2026-09-24; price UNVERIFIED "
+               "(absent from the Price List API 2026-09-25)"),
     "mistral.ministral-3-3b-instruct": Model(
         "mistral.ministral-3-3b-instruct",
         input_per_1k=0.0001, output_per_1k=0.0001,

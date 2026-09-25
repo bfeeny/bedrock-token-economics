@@ -29,7 +29,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from tokens.meter import Meter  # noqa: E402
 from tokens.stats import describe, paired_bootstrap  # noqa: E402
-from tokens.workloads import filler, system_blocks, tool_config  # noqa: E402
+from tokens.workloads import filler_for_model, system_blocks, tool_config  # noqa: E402
 
 TURN_PROMPTS = [
     "Look up the customer record for identifier C-4471 and summarize it in one line.",
@@ -46,7 +46,7 @@ def run(args) -> dict:
     # A system prompt long enough to clear the model's minimum cacheable prefix.
     # Haiku 4.5 needs 4,096 tokens; below that the checkpoint is silently ignored.
     system_text = ("You are an operations assistant with access to internal tools. "
-                   "Answer concisely.\n\n" + filler(args.filler_paragraphs))
+                   "Answer concisely.\n\n" + filler_for_model(args.model))
 
     summary = {"model": args.model, "turns": args.turns, "seeds": args.seeds,
                "filler_paragraphs": args.filler_paragraphs, "by_catalog": {}}

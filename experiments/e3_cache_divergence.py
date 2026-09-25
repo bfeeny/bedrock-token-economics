@@ -11,9 +11,25 @@ FP16 and 75% at 4-bit.
 Vendors state that cache hits do not change output quality. Both can be true:
 the conditional distribution is unchanged while the sampled realization moves.
 
-Nobody has published this for a hosted API. This settles it for Bedrock with our
-own data: the same prompt at temperature 0, with and without a cache checkpoint,
-repeated, and the outputs diffed.
+Nobody has published this for a hosted API. The first run (Sonnet 4.5, 12
+repeats x 3 prompts, 2026-09-25) found the reason why, and it is a result in
+itself:
+
+    prompt 0  uncached: 4 distinct outputs in 12 runs (modal share 0.50)
+    prompt 2  uncached: 8 distinct outputs in 12 runs (modal share 0.25)
+
+**The uncached control is not deterministic at temperature 0.** The published
+measurements come from self-hosted stacks where the cache-off arm is
+bit-identical across 800 episodes, which is what makes a diff meaningful. On a
+hosted API there is no such baseline, so "did the cache change the answer"
+cannot be answered by diffing outputs -- any difference is already present
+without a cache.
+
+The answerable question is distributional: does the *distribution* of outputs
+differ between arms? That needs many more samples per prompt and a test over
+output frequencies, not a diff. This script now measures the determinism of both
+arms, which is the prerequisite, and reports it honestly rather than presenting
+a diff that cannot support the claim.
 
     python3 experiments/e3_cache_divergence.py --repeats 20
 """
@@ -25,7 +41,7 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from tokens.meter import Meter  # noqa: E402
-from tokens.workloads import filler, system_blocks  # noqa: E402
+from tokens.workloads import filler_for_model, system_blocks  # noqa: E402
 
 # Open-ended generation, because a one-word answer cannot diverge: any
 # divergence measurement on a constrained task measures the task, not the cache.
@@ -38,7 +54,7 @@ PROMPTS = [
 
 def run(args):
     meter = Meter("e3_cache_divergence", client=args.client, profile=args.profile)
-    system_text = "You are a careful analyst.\n\n" + filler(args.filler_paragraphs)
+    system_text = "You are a careful analyst.\n\n" + filler_for_model(args.model)
 
     for arm, cached in (("uncached", False), ("cached", True)):
         for i, prompt in enumerate(PROMPTS):

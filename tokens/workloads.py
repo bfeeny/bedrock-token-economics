@@ -7,6 +7,12 @@ hold verbosity fixed is measuring two things at once.
 """
 from __future__ import annotations
 
+from .prices import model as price_of
+
+# Rough, and deliberately conservative: used only to size a prefix so it clears
+# a model's minimum cacheable length with margin, never to report a count.
+CHARS_PER_TOKEN = 4.2
+
 TOOL_DOMAINS = [
     ("crm", "customer record"), ("billing", "invoice"), ("inventory", "stock item"),
     ("hr", "employee record"), ("ticketing", "support ticket"), ("calendar", "event"),
@@ -75,3 +81,22 @@ def filler(paragraphs: int, seed_text: str = "") -> str:
             f"{chr(65 + i % 26)}{i % 10} and escalating to queue {i % 5 + 1} when the variance "
             f"exceeds {i % 13 + 2} percent of the declared value.")
     return "\n\n".join(out)
+
+
+def filler_for_model(model_id: str, margin: float = 1.25, minimum_paragraphs: int = 20) -> str:
+    """Filler long enough that this model will actually cache the prefix.
+
+    Observed live: an identical 3,935-token prefix caches on Sonnet 4.5
+    (minimum 1,024) and is silently ignored by Haiku 4.5 (minimum 4,096) --
+    same code, no error, full input billed. Sizing the prefix from the model's
+    own minimum turns that from a result you have to notice into one you cannot
+    produce by accident.
+    """
+    m = price_of(model_id)
+    if not m.min_cache_tokens:
+        return filler(minimum_paragraphs)
+    target_chars = m.min_cache_tokens * margin * CHARS_PER_TOKEN
+    paragraphs = minimum_paragraphs
+    while len(filler(paragraphs)) < target_chars:
+        paragraphs += 5
+    return filler(paragraphs)

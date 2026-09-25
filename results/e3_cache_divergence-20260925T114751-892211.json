@@ -1,0 +1,49 @@
+{
+ "model": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+ "repeats": 12,
+ "by_prompt": {
+  "0": {
+   "uncached": {
+    "n": 12,
+    "distinct_outputs": 4,
+    "modal_share": 0.5
+   },
+   "cached": {
+    "n": 12,
+    "distinct_outputs": 2,
+    "modal_share": 0.917
+   },
+   "cached_only_outputs": 1,
+   "shared_outputs": 1
+  },
+  "1": {
+   "uncached": {
+    "n": 12,
+    "distinct_outputs": 1,
+    "modal_share": 1.0
+   },
+   "cached": {
+    "n": 12,
+    "distinct_outputs": 1,
+    "modal_share": 1.0
+   },
+   "cached_only_outputs": 0,
+   "shared_outputs": 1
+  },
+  "2": {
+   "uncached": {
+    "n": 12,
+    "distinct_outputs": 8,
+    "modal_share": 0.25
+   },
+   "cached": {
+    "n": 12,
+    "distinct_outputs": 8,
+    "modal_share": 0.25
+   },
+   "cached_only_outputs": 6,
+   "shared_outputs": 2
+  }
+ },
+ "cache_assertions": "ok"
+}
