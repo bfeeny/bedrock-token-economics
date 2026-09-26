@@ -77,6 +77,7 @@ def run(args) -> dict:
                 f"silently behave like the static arm. Use --subset < {n - 1}.")
 
     summary = {"model": args.model, "turns": args.turns, "seeds": args.seeds,
+               "verbose_schemas": args.verbose_schemas,
                "filler_paragraphs": args.filler_paragraphs, "by_catalog": {}}
 
     for n_tools in args.tools:
@@ -172,7 +173,10 @@ def main() -> int:
     ap.add_argument("--max-tokens", type=int, default=128)
     ap.add_argument("--filler-paragraphs", type=int, default=60,
                     help="pads the system prompt past the model's minimum cacheable prefix")
-    ap.add_argument("--verbose-schemas", action="store_true", default=True)
+    # Verbosity is the variable the literature conflates with tool count, so it
+    # has to be independently settable. (It previously could not be turned off.)
+    ap.add_argument("--terse-schemas", dest="verbose_schemas", action="store_false",
+                    default=True, help="one-line tool descriptions instead of full ones")
     ap.add_argument("--profile", default="personal")
     ap.set_defaults(client=None)
     args = ap.parse_args()
