@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  S3 bucket and IAM role for Amazon Bedrock model evaluation jobs. The managed
+  evaluator runs as Bedrock, not as you, so it needs its own role with read
+  access to the dataset and write access to the results prefix.
+
+Parameters:
+  Prefix:
+    Type: String
+    Default: tokenecon
+    AllowedPattern: "^[a-z0-9]{1,20}$"
+
+Resources:
+  EvalBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${Prefix}-eval-${AWS::AccountId}"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 }
+      LifecycleConfiguration:
+        Rules:
+          # Evaluation inputs and outputs are reproducible from the raw JSONL
+          # in the repo, so there is no reason to keep paying for them.
+          - Id: expire
+            Status: Enabled
+            ExpirationInDays: 30
+
+  EvalRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${Prefix}-bedrock-eval"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: bedrock.amazonaws.com }
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                "aws:SourceAccount": !Ref AWS::AccountId
+              ArnLike:
+                "aws:SourceArn": !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:evaluation-job/*"
+      Policies:
+        - PolicyName: eval
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: [s3:GetObject, s3:ListBucket]
+                Resource:
+                  - !GetAtt EvalBucket.Arn
+                  - !Sub "${EvalBucket.Arn}/*"
+              - Effect: Allow
+                Action: [s3:PutObject]
+                Resource: !Sub "${EvalBucket.Arn}/results/*"
+              - Effect: Allow
+                # The evaluator model is invoked by Bedrock under this role.
+                # A `us.` inference profile fans out to every region it spans
+                # and authorizes against the foundation model in whichever one
+                # it lands on, so pinning the model grant to this stack's region
+                # fails with "does not have permission to call the model".
+                Action: [bedrock:InvokeModel]
+                Resource:
+                  - "arn:aws:bedrock:*::foundation-model/*"
+                  - !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:inference-profile/*"
+
+Outputs:
+  BucketName:
+    Value: !Ref EvalBucket
+  RoleArn:
+    Value: !GetAtt EvalRole.Arn

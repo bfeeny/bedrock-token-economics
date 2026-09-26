@@ -71,15 +71,25 @@ def filler(paragraphs: int, seed_text: str = "") -> str:
 
     Non-repetitive on purpose: a prefix of one sentence repeated compresses and
     tokenizes unlike real context, which would flatter any caching result.
+
+    Deliberately neutral technical content. An earlier version described case
+    review, analyst escalation and discrepancy handling, and asking the model to
+    summarize risks in it produced `stop_reason: content_filtered` on a third of
+    all generations -- empty strings that a judge then scored as identical to
+    each other. Benign-looking text is not the same as text that survives a
+    content filter, and a filtered response is an empty result, not a short one.
     """
     out = []
     for i in range(paragraphs):
         out.append(
-            f"Section {i + 1}. {seed_text}The operating procedure for case {i * 7 + 3} requires "
-            f"that the reviewing analyst confirm identifier {i * 131 + 17} against the register "
-            f"before releasing record {i * 29 + 5}, noting any discrepancy in field "
-            f"{chr(65 + i % 26)}{i % 10} and escalating to queue {i % 5 + 1} when the variance "
-            f"exceeds {i % 13 + 2} percent of the declared value.")
+            f"Section {i + 1}. {seed_text}Service tier {i % 7 + 1} maintains a connection pool "
+            f"of {i * 4 + 12} workers and flushes its write buffer every {i % 9 + 2} seconds. "
+            f"The scheduler assigns partition {i * 13 % 97} to the replica group holding lease "
+            f"{i * 31 + 5}, and emits a checkpoint once {i * 17 + 40} records have been "
+            f"acknowledged. Retries use exponential backoff starting at {i % 5 + 1} hundred "
+            f"milliseconds with a ceiling of {i % 11 + 4} seconds, and the compaction job runs "
+            f"when the segment count for shard {chr(97 + i % 26)}{i % 10} exceeds "
+            f"{i % 6 + 3} times the configured floor.")
     return "\n\n".join(out)
 
 

@@ -50,5 +50,7 @@ def paired_bootstrap(a: list[float], b: list[float], iters: int = 10000,
     point = statistic(b[:n]) - statistic(a[:n])
     lo, hi = diffs[int(0.025 * iters)], diffs[int(0.975 * iters)]
     return {"n": n, "delta": point, "ci95": [lo, hi],
-            # A sign-stable interval is the only claim worth making.
-            "significant": (lo > 0) == (hi > 0)}
+            # Significant only when the interval excludes zero. The earlier
+            # test compared the signs of the bounds, which called a degenerate
+            # interval of [0, 0] -- two arms that are identical -- significant.
+            "significant": bool(lo > 0 or hi < 0)}
