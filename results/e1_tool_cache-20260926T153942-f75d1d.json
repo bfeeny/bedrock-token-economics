@@ -1,0 +1,199 @@
+{
+ "model": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+ "turns": 6,
+ "seeds": 3,
+ "filler_paragraphs": 60,
+ "by_catalog": {
+  "200": {
+   "static": {
+    "usd": {
+     "n": 18,
+     "p50": 0.0128247,
+     "p90": 0.13492275,
+     "min": 0.0125187,
+     "max": 0.13492275,
+     "mean": 0.033087708333333334,
+     "max_over_min": 10.78
+    },
+    "quota_tokens": {
+     "n": 18,
+     "p50": 728.0,
+     "p90": 36107.0,
+     "min": 626.0,
+     "max": 36107.0,
+     "mean": 6595.611111111111,
+     "max_over_min": 57.68
+    },
+    "input_tokens": {
+     "n": 18,
+     "p50": 338.0,
+     "p90": 343.0,
+     "min": 336.0,
+     "max": 343.0,
+     "mean": 338.8333333333333,
+     "max_over_min": 1.02
+    },
+    "cache_read": {
+     "n": 18,
+     "p50": 35469.0,
+     "p90": 35469.0,
+     "min": 0.0,
+     "max": 35469.0,
+     "mean": 29557.5,
+     "max_over_min": null
+    },
+    "cache_write": {
+     "n": 18,
+     "p50": 0.0,
+     "p90": 35469.0,
+     "min": 0.0,
+     "max": 35469.0,
+     "mean": 5911.5,
+     "max_over_min": null
+    },
+    "latency_ms": {
+     "n": 18,
+     "p50": 2584.6,
+     "p90": 3564.7,
+     "min": 2125.5,
+     "max": 5547.5,
+     "mean": 2891.461111111111,
+     "max_over_min": 2.61
+    }
+   },
+   "dynamic_cache": {
+    "usd": {
+     "n": 18,
+     "p50": 0.0030618,
+     "p90": 0.0036411,
+     "min": 0.0025785,
+     "max": 0.0036486,
+     "mean": 0.00320065,
+     "max_over_min": 1.42
+    },
+    "quota_tokens": {
+     "n": 18,
+     "p50": 786.0,
+     "p90": 978.0,
+     "min": 626.0,
+     "max": 982.0,
+     "mean": 832.4444444444445,
+     "max_over_min": 1.57
+    },
+    "input_tokens": {
+     "n": 18,
+     "p50": 338.0,
+     "p90": 343.0,
+     "min": 336.0,
+     "max": 343.0,
+     "mean": 338.8333333333333,
+     "max_over_min": 1.02
+    },
+    "cache_read": {
+     "n": 18,
+     "p50": 2346.0,
+     "p90": 2350.0,
+     "min": 2335.0,
+     "max": 2357.0,
+     "mean": 2344.3888888888887,
+     "max_over_min": 1.01
+    },
+    "cache_write": {
+     "n": 18,
+     "p50": 0.0,
+     "p90": 0.0,
+     "min": 0.0,
+     "max": 0.0,
+     "mean": 0.0,
+     "max_over_min": null
+    },
+    "latency_ms": {
+     "n": 18,
+     "p50": 2800.0,
+     "p90": 3897.1,
+     "min": 1826.6,
+     "max": 4322.1,
+     "mean": 2785.1277777777777,
+     "max_over_min": 2.37
+    }
+   },
+   "dynamic": {
+    "usd": {
+     "n": 18,
+     "p50": 0.009396,
+     "p90": 0.009972,
+     "min": 0.008883,
+     "max": 0.010005,
+     "mean": 0.0095405,
+     "max_over_min": 1.13
+    },
+    "quota_tokens": {
+     "n": 18,
+     "p50": 3132.0,
+     "p90": 3324.0,
+     "min": 2961.0,
+     "max": 3335.0,
+     "mean": 3180.1666666666665,
+     "max_over_min": 1.13
+    },
+    "input_tokens": {
+     "n": 18,
+     "p50": 2682.0,
+     "p90": 2693.0,
+     "min": 2671.0,
+     "max": 2700.0,
+     "mean": 2683.222222222222,
+     "max_over_min": 1.01
+    },
+    "cache_read": {
+     "n": 18,
+     "p50": 0.0,
+     "p90": 0.0,
+     "min": 0.0,
+     "max": 0.0,
+     "mean": 0.0,
+     "max_over_min": null
+    },
+    "cache_write": {
+     "n": 18,
+     "p50": 0.0,
+     "p90": 0.0,
+     "min": 0.0,
+     "max": 0.0,
+     "mean": 0.0,
+     "max_over_min": null
+    },
+    "latency_ms": {
+     "n": 18,
+     "p50": 2767.6,
+     "p90": 3446.2,
+     "min": 1923.9,
+     "max": 4211.1,
+     "mean": 2739.327777777778,
+     "max_over_min": 2.19
+    }
+   },
+   "usd_delta_dynamic_minus_static": {
+    "n": 18,
+    "delta": -0.0033897000000000007,
+    "ci95": [
+     -0.0035907000000000005,
+     -0.0027387
+    ],
+    "significant": true
+   },
+   "quota_delta_dynamic_minus_static": {
+    "n": 18,
+    "delta": 2417.0,
+    "ci95": [
+     2350.0,
+     2634.0
+    ],
+    "significant": true
+   },
+   "gateway_search_fee_usd_this_run": 0.0009,
+   "gateway_index_fee_usd_per_month": 0.04
+  }
+ },
+ "cache_assertions": "ok"
+}
