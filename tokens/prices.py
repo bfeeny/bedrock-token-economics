@@ -16,7 +16,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-PRICED_ON = "2026-09-24"
+PRICED_ON = "2026-09-26"
+
+# Service tiers multiply the per-token rate for the whole call. Verified from
+# the Bedrock pricing page; `batch` is the asynchronous job, not a tier you can
+# pass on Converse. As of 2026-09-26 neither `flex` nor `priority` is accepted
+# by Claude Sonnet 4.5 or Haiku 4.5 -- the API takes the parameter and the
+# models reject it -- so these are unexercised.
+SERVICE_TIER_MULT = {"default": 1.00, "flex": 0.50, "priority": 1.75, "batch": 0.50}
 
 
 @dataclass(frozen=True)
@@ -104,17 +111,19 @@ def model(model_id: str) -> Model:
 
 def dollars(m: Model, input_tok: int, output_tok: int,
             cache_read: int = 0, cache_write: int = 0,
-            ttl: str = "5m") -> float | None:
+            ttl: str = "5m", service_tier: str = "default") -> float | None:
     """Dollars for one call. `ttl` selects the cache-write multiplier: a
     1-hour entry is written at 2.0x input against 1.25x for 5 minutes, so a
     long TTL needs proportionally more reads before it pays for itself."""
     if m.input_per_1k is None or m.output_per_1k is None:
         return None
     write_mult = m.cache_write_mult_1h if ttl == "1h" else m.cache_write_mult
+    tier = SERVICE_TIER_MULT.get(service_tier, 1.0)
     # Cache reads and writes are input tokens at a different rate. Bedrock
     # reports them separately from `inputTokens`, so they are added, not netted.
     return round(
-        (input_tok * m.input_per_1k
+        tier
+        * (input_tok * m.input_per_1k
          + cache_write * m.input_per_1k * write_mult
          + cache_read * m.input_per_1k * m.cache_read_mult
          + output_tok * m.output_per_1k) / 1000.0, 10)
@@ -136,6 +145,7 @@ def cache_breakeven_reads(m: Model, ttl: str = "5m") -> float:
     not cache existence, is the variable that matters.
     """
     write_mult = m.cache_write_mult_1h if ttl == "1h" else m.cache_write_mult
+    tier = SERVICE_TIER_MULT.get(service_tier, 1.0)
     return (write_mult - 1.0) / (1.0 - m.cache_read_mult)
 
 

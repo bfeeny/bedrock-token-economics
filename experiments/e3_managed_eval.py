@@ -164,9 +164,17 @@ def status(args):
         bucket = uri.split("/")[2]
         prefix = "/".join(uri.split("/")[3:])
         s3 = s.client("s3")
+        # Every job writes under the same configured prefix, so the listing must
+        # be narrowed to THIS job. Reading the whole prefix silently aggregates
+        # across runs -- it reported 100 verdicts for a 60-pair job, mixing in a
+        # superseded dataset.
+        job_id = args.status.rsplit("/", 1)[-1]
         keys = [o["Key"] for o in
                 s3.list_objects_v2(Bucket=bucket, Prefix=prefix).get("Contents", [])
-                if o["Key"].endswith(".jsonl")]
+                if o["Key"].endswith(".jsonl") and job_id in o["Key"]]
+        if not keys:
+            print(f"  no result files found for job {job_id}")
+            return 0
         verdicts, explanations = {}, []
         for k in keys:
             for line in s3.get_object(Bucket=bucket, Key=k)["Body"].read().decode().splitlines():

@@ -44,6 +44,7 @@ class Row:
     truncated: bool = False
     cache_expected: bool = False
     cache_took: bool = False
+    service_tier: str = ""
     text: str = ""
     error: str = ""
     attrs: dict = field(default_factory=dict)
@@ -72,7 +73,8 @@ class Meter:
     def call(self, *, arm: str, seed: int, model_id: str, messages: list,
              system: list | None = None, tool_config: dict | None = None,
              max_tokens: int = 512, temperature: float = 0.0,
-             effort: str | None = None, cache_expected: bool = False,
+             effort: str | None = None, service_tier: str | None = None,
+             cache_expected: bool = False,
              keep_text: bool = True, attrs: dict | None = None) -> Row:
         m: Model = price_of(model_id)
         kwargs: dict = {
@@ -86,6 +88,11 @@ class Meter:
             kwargs["toolConfig"] = tool_config
         if effort:
             kwargs["outputConfig"] = {"effort": effort}
+        if service_tier:
+            # flex is half price and priority is +75%; both are rejected by
+            # Sonnet 4.5 and Haiku 4.5 as of 2026-09-26, so this is plumbing
+            # waiting on a model that accepts it.
+            kwargs["serviceTier"] = {"type": service_tier}
 
         row = Row(run_id=self.run_id, experiment=self.experiment, arm=arm, seed=seed,
                   model_id=model_id, cache_expected=cache_expected, attrs=attrs or {})
@@ -105,6 +112,7 @@ class Meter:
         row.cache_read_tokens = int(u.get("cacheReadInputTokens", 0) or 0)
         row.cache_write_tokens = int(u.get("cacheWriteInputTokens", 0) or 0)
         row.stop_reason = r.get("stopReason", "")
+        row.service_tier = (r.get("serviceTier") or {}).get("type", "")
         row.truncated = row.stop_reason == "max_tokens"
         row.cache_took = bool(row.cache_read_tokens or row.cache_write_tokens)
         row.usd = dollars(m, row.input_tokens, row.output_tokens,
