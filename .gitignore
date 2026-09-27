@@ -2,4 +2,7 @@ __pycache__/
 *.pyc
 .venv/
 results/raw/*.jsonl
+# paper/data holds the canonical runs the manuscript cites, raw included,
+# so every figure is reproducible from the repo with no inference.
+!paper/data/*.jsonl
 .DS_Store

@@ -1,0 +1,112 @@
+{
+ "model": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+ "judge": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+ "repeats": 16,
+ "pairs_per_cell": 24,
+ "by_prompt": {
+  "0": {
+   "distinct": {
+    "uncached": 5,
+    "cached": 3
+   },
+   "n": {
+    "uncached": 16,
+    "cached": 16
+   },
+   "within_uncached_same_rate": 0.792,
+   "within_uncached_n": 24,
+   "within_cached_same_rate": 1.0,
+   "within_cached_n": 24,
+   "between_same_rate": 0.5,
+   "between_n": 24,
+   "between_minus_within_uncached": {
+    "n": 24,
+    "delta": -0.29166666666666663,
+    "ci95": [
+     -0.5416666666666667,
+     0.0
+    ],
+    "significant": false
+   },
+   "between_minus_within_cached": {
+    "n": 24,
+    "delta": -0.5,
+    "ci95": [
+     -0.7083333333333333,
+     -0.29166666666666663
+    ],
+    "significant": true
+   }
+  },
+  "1": {
+   "distinct": {
+    "uncached": 10,
+    "cached": 5
+   },
+   "n": {
+    "uncached": 16,
+    "cached": 16
+   },
+   "within_uncached_same_rate": 0.292,
+   "within_uncached_n": 24,
+   "within_cached_same_rate": 0.458,
+   "within_cached_n": 24,
+   "between_same_rate": 0.375,
+   "between_n": 24,
+   "between_minus_within_uncached": {
+    "n": 24,
+    "delta": 0.08333333333333331,
+    "ci95": [
+     -0.20833333333333331,
+     0.375
+    ],
+    "significant": false
+   },
+   "between_minus_within_cached": {
+    "n": 24,
+    "delta": -0.08333333333333331,
+    "ci95": [
+     -0.375,
+     0.20833333333333331
+    ],
+    "significant": false
+   }
+  },
+  "2": {
+   "distinct": {
+    "uncached": 8,
+    "cached": 2
+   },
+   "n": {
+    "uncached": 16,
+    "cached": 16
+   },
+   "within_uncached_same_rate": 0.583,
+   "within_uncached_n": 24,
+   "within_cached_same_rate": 1.0,
+   "within_cached_n": 24,
+   "between_same_rate": 0.792,
+   "between_n": 24,
+   "between_minus_within_uncached": {
+    "n": 24,
+    "delta": 0.20833333333333326,
+    "ci95": [
+     -0.04166666666666674,
+     0.45833333333333337
+    ],
+    "significant": false
+   },
+   "between_minus_within_cached": {
+    "n": 24,
+    "delta": -0.20833333333333337,
+    "ci95": [
+     -0.375,
+     -0.04166666666666663
+    ],
+    "significant": true
+   }
+  }
+ },
+ "judge_cost_usd": 0.112044,
+ "judge_calls": 216
+}
