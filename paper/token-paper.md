@@ -1,15 +1,15 @@
 ---
-title: "Two Currencies: Prompt Caching, Tool Catalogs and the Cost of Agentic Inference on Amazon Bedrock"
+title: "Token Economics on Amazon Bedrock: Prompt Caching and Tool Catalogs"
 author: Brian Feeny
 date: 2026-09-26
 ---
 
-# Two Currencies: Prompt Caching, Tool Catalogs and the Cost of Agentic Inference on Amazon Bedrock
+# Token Economics on Amazon Bedrock: Prompt Caching and Tool Catalogs
 
 **Brian Feeny**
 
-*26 September 2026. Independent work. I work at Amazon Web Services; the views and
-assessments here are my own.*
+*26 September 2026. Independent work. The views and assessments here are my own
+and do not represent those of my employer.*
 
 ---
 
